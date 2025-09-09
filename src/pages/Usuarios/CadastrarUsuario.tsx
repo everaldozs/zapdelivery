@@ -195,7 +195,7 @@ const CadastrarUsuario: React.FC = () => {
 
             {/* Estabelecimento */}
             <div className="space-y-2">
-              <label htmlFor="estabelecimento" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="Estabelecimento" className="block text-sm font-medium text-gray-700">
                 Estabelecimento *
               </label>
               {loadingEstabelecimentos ? (

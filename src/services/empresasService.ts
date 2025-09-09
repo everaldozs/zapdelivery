@@ -111,7 +111,7 @@ class EmpresasService {
     }
 
     // Verificar permissões - apenas admin_geral pode ver todas as empresas
-    if (profile.role_name !== 'admin_geral') {
+    if (profile.role_name !== 'Administrator') {
       throw new Error('Acesso negado. Apenas administradores podem gerenciar empresas.');
     }
 
@@ -134,7 +134,7 @@ class EmpresasService {
       throw new Error('Usuário não autenticado');
     }
 
-    if (profile.role_name !== 'admin_geral') {
+    if (profile.role_name !== 'Administrator') {
       throw new Error('Acesso negado. Apenas administradores podem gerenciar empresas.');
     }
 
@@ -157,7 +157,7 @@ class EmpresasService {
       throw new Error('Usuário não autenticado');
     }
 
-    if (profile.role_name !== 'admin_geral') {
+    if (profile.role_name !== 'Administrator') {
       throw new Error('Acesso negado. Apenas administradores podem criar empresas.');
     }
 
@@ -213,7 +213,7 @@ class EmpresasService {
       throw new Error('Usuário não autenticado');
     }
 
-    if (profile.role_name !== 'admin_geral') {
+    if (profile.role_name !== 'Administrator') {
       throw new Error('Acesso negado. Apenas administradores podem editar empresas.');
     }
 
@@ -272,7 +272,7 @@ class EmpresasService {
       throw new Error('Usuário não autenticado');
     }
 
-    if (profile.role_name !== 'admin_geral') {
+    if (profile.role_name !== 'Administrator') {
       throw new Error('Acesso negado. Apenas administradores podem excluir empresas.');
     }
 
@@ -303,7 +303,7 @@ class EmpresasService {
       throw new Error('Usuário não autenticado');
     }
 
-    if (profile.role_name !== 'admin_geral') {
+    if (profile.role_name !== 'Administrator') {
       throw new Error('Acesso negado. Apenas administradores podem ver estatísticas.');
     }
 

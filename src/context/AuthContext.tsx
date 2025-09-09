@@ -2,22 +2,17 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import type { User, Session } from '@supabase/supabase-js';
 
-export type UserRole = 'admin_geral' | 'estabelecimento' | 'atendente';
+export type UserRole = 'Administrator' | 'Estabelecimento' | 'Atendente';
 
 export interface UserProfile {
   id: string;
-  user_id: string;
+  email: string;
+  name: string;
+  role_name: UserRole;
+  status: string;
   estabelecimento_id: string | null;
-  role_id: number;
-  nome: string;
-  telefone: string | null;
-  ativo: boolean;
   created_at: string;
   updated_at: string;
-  // Dados do JOIN com user_roles
-  role_name: UserRole;
-  role_display_name: string;
-  description: string;
   // Dados do estabelecimento (quando aplicável)
   estabelecimento_nome?: string;
 }
@@ -52,20 +47,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const fetchUserProfile = async (userId: string): Promise<UserProfile | null> => {
     try {
       const { data, error } = await supabase
-        .from('user_profiles')
+        .from('system_users')
         .select(`
           *,
-          user_roles!inner (
-            role_name,
-            role_display_name,
-            description
-          ),
           estabelecimentos (
             nome
           )
         `)
-        .eq('user_id', userId)
-        .eq('ativo', true)
+        .eq('id', userId)
+        .eq('status', 'active')
         .single();
 
       if (error) {
@@ -73,12 +63,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return null;
       }
 
-      // Mapear os dados do JOIN para o formato correto
+      // Mapear os dados para o formato correto
       const profile: UserProfile = {
         ...data,
-        role_name: data.user_roles.role_name,
-        role_display_name: data.user_roles.role_display_name,
-        description: data.user_roles.description,
         estabelecimento_nome: data.estabelecimentos?.nome
       };
 
@@ -217,8 +204,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const canAccessEstabelecimento = (estabelecimentoId?: string): boolean => {
     if (!profile) return false;
     
-    // Admin geral pode acessar qualquer estabelecimento
-    if (profile.role_name === 'admin_geral') return true;
+    // Administrator pode acessar qualquer estabelecimento
+    if (profile.role_name === 'Administrator') return true;
     
     // Se não especificou estabelecimento, verificar se usuário tem um
     if (!estabelecimentoId) return !!profile.estabelecimento_id;
@@ -227,9 +214,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return profile.estabelecimento_id === estabelecimentoId;
   };
 
-  const isAdmin = (): boolean => hasRole('admin_geral');
-  const isEstabelecimento = (): boolean => hasRole('estabelecimento');
-  const isAtendente = (): boolean => hasRole('atendente');
+  const isAdmin = (): boolean => hasRole('Administrator');
+  const isEstabelecimento = (): boolean => hasRole('Estabelecimento');
+  const isAtendente = (): boolean => hasRole('Atendente');
 
   const value = {
     user,

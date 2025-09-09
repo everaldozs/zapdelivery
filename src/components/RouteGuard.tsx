@@ -86,7 +86,7 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({
               'text-xs mb-4',
               theme === 'dark' ? 'text-gray-500' : 'text-gray-500'
             )}>
-              Role atual: <span className="font-mono font-semibold">{profile.role_display_name}</span>
+              Role atual: <span className="font-mono font-semibold">{profile.role_name}</span>
             </p>
             <button
               onClick={() => window.history.back()}

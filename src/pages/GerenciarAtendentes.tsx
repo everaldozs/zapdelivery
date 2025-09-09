@@ -79,7 +79,7 @@ const GerenciarAtendentes: React.FC = () => {
       const { data: atendenteRole } = await supabase
         .from('user_roles')
         .select('id')
-        .eq('role_name', 'atendente')
+        .eq('role_name', 'Atendente')
         .single();
 
       if (atendenteRole) {

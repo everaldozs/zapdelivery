@@ -135,7 +135,7 @@ const ListarPedidos: React.FC = () => {
   useEffect(() => {
     console.log('🔄 useEffect: carregando pedidos, profile:', {
       profile: profile ? {
-        nome: profile.nome,
+        nome: profile.name,
         role: profile.role_name,
         estabelecimento_id: profile.estabelecimento_id
       } : null

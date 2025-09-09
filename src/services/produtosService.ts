@@ -45,7 +45,7 @@ class ProdutosService {
       .order('nome', { ascending: true });
 
     // Aplicar filtro por estabelecimento apenas para não-admin
-    if (profile.role_name !== 'admin_geral' && profile.estabelecimento_id) {
+    if (profile.role_name !== 'Administrator' && profile.estabelecimento_id) {
       query = query.eq('codigo_estabelecimento', profile.estabelecimento_id);
     }
 
@@ -74,7 +74,7 @@ class ProdutosService {
       .order('nome', { ascending: true });
 
     // Aplicar filtro por estabelecimento apenas para não-admin
-    if (profile.role_name !== 'admin_geral' && profile.estabelecimento_id) {
+    if (profile.role_name !== 'Administrator' && profile.estabelecimento_id) {
       query = query.eq('codigo_estabelecimento', profile.estabelecimento_id);
     }
 
@@ -94,7 +94,7 @@ class ProdutosService {
     }
 
     // Verificar permissões
-    if (profile.role_name === 'atendente') {
+    if (profile.role_name === 'Atendente') {
       throw new Error('Atendentes não têm permissão para criar produtos');
     }
 
@@ -131,7 +131,7 @@ class ProdutosService {
     }
 
     // Verificar permissões
-    if (profile.role_name === 'atendente') {
+    if (profile.role_name === 'Atendente') {
       throw new Error('Atendentes não têm permissão para editar produtos');
     }
 
@@ -141,7 +141,7 @@ class ProdutosService {
       .eq('codigo', codigo);
 
     // Aplicar filtro por estabelecimento para não-admin
-    if (profile.role_name !== 'admin_geral' && profile.estabelecimento_id) {
+    if (profile.role_name !== 'Administrator' && profile.estabelecimento_id) {
       query = query.eq('codigo_estabelecimento', profile.estabelecimento_id);
     }
 
@@ -165,7 +165,7 @@ class ProdutosService {
     }
 
     // Verificar permissões - apenas estabelecimento e admin podem deletar
-    if (profile.role_name === 'atendente') {
+    if (profile.role_name === 'Atendente') {
       throw new Error('Atendentes não têm permissão para deletar produtos');
     }
 
@@ -175,7 +175,7 @@ class ProdutosService {
       .eq('codigo', codigo);
 
     // Aplicar filtro por estabelecimento para não-admin
-    if (profile.role_name !== 'admin_geral' && profile.estabelecimento_id) {
+    if (profile.role_name !== 'Administrator' && profile.estabelecimento_id) {
       query = query.eq('codigo_estabelecimento', profile.estabelecimento_id);
     }
 
@@ -212,7 +212,7 @@ class ProdutosService {
       .order('nome', { ascending: true });
 
     // Aplicar filtro por estabelecimento apenas para não-admin
-    if (profile.role_name !== 'admin_geral' && profile.estabelecimento_id) {
+    if (profile.role_name !== 'Administrator' && profile.estabelecimento_id) {
       query = query.eq('codigo_estabelecimento', profile.estabelecimento_id);
     }
 
@@ -237,7 +237,7 @@ class ProdutosService {
       .eq('codigo', codigo);
 
     // Aplicar filtro por estabelecimento para não-admin
-    if (profile.role_name !== 'admin_geral' && profile.estabelecimento_id) {
+    if (profile.role_name !== 'Administrator' && profile.estabelecimento_id) {
       query = query.eq('codigo_estabelecimento', profile.estabelecimento_id);
     }
 

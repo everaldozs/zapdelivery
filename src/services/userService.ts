@@ -15,7 +15,7 @@ export interface SystemUser {
   // Campos específicos para estabelecimentos
   cnpj?: string;
   telefone?: string;
-  user_type: 'system_user' | 'estabelecimento'; // Para identificar a origem
+  user_type: 'system_user' | 'Estabelecimento'; // Para identificar a origem
 }
 
 export interface CreateUserRequest {
@@ -67,14 +67,14 @@ export const userService = {
         });
       }
 
-      // Adicionar estabelecimentos como usuários do tipo "estabelecimento"
+      // Adicionar estabelecimentos como usuários do tipo "Estabelecimento"
       if (estabelecimentos) {
         estabelecimentos.forEach(estabelecimento => {
           allUsers.push({
             id: estabelecimento.codigo,
             name: estabelecimento.nome || 'Nome não informado',
             email: estabelecimento.email || 'Email não informado',
-            role_name: 'estabelecimento',
+            role_name: 'Estabelecimento',
             estabelecimento_id: null,
             estabelecimento: {
               id: estabelecimento.codigo,
@@ -84,7 +84,7 @@ export const userService = {
             updated_at: estabelecimento.data_criacao || new Date().toISOString(),
             cnpj: estabelecimento.cnpj || 'CNPJ não informado',
             telefone: estabelecimento.telefone || 'Telefone não informado',
-            user_type: 'estabelecimento'
+            user_type: 'Estabelecimento'
           });
         });
       }

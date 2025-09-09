@@ -22,13 +22,13 @@ export function hasPermission(
   profile: UserProfile | null,
   config: PermissionConfig
 ): boolean {
-  if (!profile || !profile.ativo) return false;
+  if (!profile || profile.status !== 'active') return false;
 
   // Verificar se o role do usuário está na lista de roles permitidos
   if (!config.roles.includes(profile.role_name)) return false;
 
-  // Admin geral sempre tem acesso
-  if (profile.role_name === 'admin_geral') return true;
+  // Administrator sempre tem acesso
+  if (profile.role_name === 'Administrator') return true;
 
   // Se requer estabelecimento, verificar se usuário tem um
   if (config.requireEstabelecimento && !profile.estabelecimento_id) return false;
@@ -52,21 +52,21 @@ export function canPerformAction(
   resource: 'pedidos' | 'produtos' | 'clientes' | 'estabelecimentos' | 'atendentes',
   resourceEstabelecimentoId?: string
 ): boolean {
-  if (!profile || !profile.ativo) return false;
+  if (!profile || profile.status !== 'active') return false;
 
   const role = profile.role_name;
 
-  // Admin geral pode tudo
-  if (role === 'admin_geral') return true;
+  // Administrator pode tudo
+  if (role === 'Administrator') return true;
 
   // Verificar permissões específicas por role e recurso
   switch (resource) {
     case 'pedidos':
-      if (role === 'estabelecimento') {
+      if (role === 'Estabelecimento') {
         // Estabelecimento pode fazer tudo nos próprios pedidos
         return !resourceEstabelecimentoId || resourceEstabelecimentoId === profile.estabelecimento_id;
       }
-      if (role === 'atendente') {
+      if (role === 'Atendente') {
         // Atendente pode ler e atualizar, mas não deletar
         if (action === 'delete') return false;
         return !resourceEstabelecimentoId || resourceEstabelecimentoId === profile.estabelecimento_id;
@@ -75,11 +75,11 @@ export function canPerformAction(
 
     case 'produtos':
     case 'clientes':
-      if (role === 'estabelecimento') {
+      if (role === 'Estabelecimento') {
         // Estabelecimento pode gerenciar próprios produtos/clientes
         return !resourceEstabelecimentoId || resourceEstabelecimentoId === profile.estabelecimento_id;
       }
-      if (role === 'atendente') {
+      if (role === 'Atendente') {
         // Atendente pode apenas ler produtos e criar/editar clientes
         if (resource === 'produtos') return action === 'read';
         if (resource === 'clientes') return action !== 'delete';
@@ -87,14 +87,14 @@ export function canPerformAction(
       return false;
 
     case 'estabelecimentos':
-      if (role === 'estabelecimento') {
+      if (role === 'Estabelecimento') {
         // Estabelecimento pode apenas editar próprio perfil
         return action === 'update' && resourceEstabelecimentoId === profile.estabelecimento_id;
       }
       return false; // Atendentes não podem gerenciar estabelecimentos
 
     case 'atendentes':
-      if (role === 'estabelecimento') {
+      if (role === 'Estabelecimento') {
         // Estabelecimento pode gerenciar próprios atendentes
         return !resourceEstabelecimentoId || resourceEstabelecimentoId === profile.estabelecimento_id;
       }
@@ -112,13 +112,13 @@ export function getDefaultRouteForRole(profile: UserProfile | null): string {
   if (!profile) return '/login';
 
   switch (profile.role_name) {
-    case 'admin_geral':
+    case 'Administrator':
       return '/dashboard'; // Dashboard completo
     
-    case 'estabelecimento':
+    case 'Estabelecimento':
       return '/dashboard'; // Dashboard do estabelecimento
     
-    case 'atendente':
+    case 'Atendente':
       return '/pedidos'; // Diretamente para o Kanban de pedidos
     
     default:
@@ -133,7 +133,7 @@ export function canAccessRoute(
   profile: UserProfile | null,
   route: string
 ): boolean {
-  if (!profile || !profile.ativo) return false;
+  if (!profile || profile.status !== 'active') return false;
 
   const role = profile.role_name;
 
@@ -141,25 +141,25 @@ export function canAccessRoute(
   const publicRoutes = ['/perfil', '/minha-conta'];
   if (publicRoutes.includes(route)) return true;
 
-  // Admin geral pode acessar tudo
-  if (role === 'admin_geral') return true;
+  // Administrator pode acessar tudo
+  if (role === 'Administrator') return true;
 
   // Rotas específicas por role
   const roleRoutes: Record<UserRole, string[]> = {
-    admin_geral: ['*'], // Acesso a tudo
+    Administrator: ['*'], // Acesso a tudo
     
-    estabelecimento: [
+    Estabelecimento: [
       '/dashboard',
       '/pedidos',
       '/produtos',
       '/clientes',
       '/cardapio',
-      '/categorias', // ADICIONADO: Acesso às rotas de categorias
+      '/categorias',
       '/estabelecimento',
       '/atendentes'
     ],
     
-    atendente: [
+    Atendente: [
       '/pedidos', // Apenas Kanban de pedidos
       '/clientes' // Pode ver/criar clientes para pedidos
     ]
@@ -203,51 +203,51 @@ export function createAuthHelpers(profile: UserProfile | null): AuthorizationHel
 export const PERMISSION_CONFIGS = {
   // Dashboard completo (apenas admin)
   FULL_DASHBOARD: {
-    roles: ['admin_geral'] as UserRole[]
+    roles: ['Administrator'] as UserRole[]
   },
   
   // Dashboard do estabelecimento
   ESTABLISHMENT_DASHBOARD: {
-    roles: ['admin_geral', 'estabelecimento'] as UserRole[],
+    roles: ['Administrator', 'Estabelecimento'] as UserRole[],
     requireEstabelecimento: true
   },
   
   // Kanban de pedidos
   ORDERS_KANBAN: {
-    roles: ['admin_geral', 'estabelecimento', 'atendente'] as UserRole[],
+    roles: ['Administrator', 'Estabelecimento', 'Atendente'] as UserRole[],
     requireEstabelecimento: true
   },
   
   // Gerenciamento de produtos
   PRODUCT_MANAGEMENT: {
-    roles: ['admin_geral', 'estabelecimento'] as UserRole[],
+    roles: ['Administrator', 'Estabelecimento'] as UserRole[],
     requireEstabelecimento: true
   },
   
   // Gerenciamento de categorias
   CATEGORY_MANAGEMENT: {
-    roles: ['admin_geral', 'estabelecimento'] as UserRole[]
-    // Sem requireEstabelecimento para permitir admin_geral sem restrições
+    roles: ['Administrator', 'Estabelecimento'] as UserRole[]
+    // Sem requireEstabelecimento para permitir Administrator sem restrições
   },
   
   // Gerenciamento de atendentes
   STAFF_MANAGEMENT: {
-    roles: ['admin_geral', 'estabelecimento'] as UserRole[],
+    roles: ['Administrator', 'Estabelecimento'] as UserRole[],
     requireEstabelecimento: true
   },
   
   // Apenas leitura para atendentes
   READ_ONLY_FOR_ATTENDANT: {
-    roles: ['admin_geral', 'estabelecimento', 'atendente'] as UserRole[]
+    roles: ['Administrator', 'Estabelecimento', 'Atendente'] as UserRole[]
   },
   
-  // Gerenciamento de usuários do sistema (apenas admin_geral)
+  // Gerenciamento de usuários do sistema (apenas Administrator)
   USER_MANAGEMENT: {
-    roles: ['admin_geral'] as UserRole[]
+    roles: ['Administrator'] as UserRole[]
   },
   
-  // Gerenciamento de tipos de usuários (apenas admin_geral)
+  // Gerenciamento de tipos de usuários (apenas Administrator)
   USER_TYPES_MANAGEMENT: {
-    roles: ['admin_geral'] as UserRole[]
+    roles: ['Administrator'] as UserRole[]
   }
 } as const;

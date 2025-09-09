@@ -165,7 +165,7 @@ export const userTypesService = {
         .eq('id', id)
         .single();
 
-      const systemRoles = ['admin_geral', 'estabelecimento', 'atendente'];
+      const systemRoles = ['Administrator', 'Estabelecimento', 'Atendente'];
       if (userType && systemRoles.includes(userType.role_name)) {
         throw new Error('Não é possível excluir tipos de usuário padrão do sistema');
       }

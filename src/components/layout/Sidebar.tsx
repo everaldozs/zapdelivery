@@ -21,12 +21,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed }) => {
   const shouldShowMenuItem = (menuId: string) => {
     // Menu "Empresas" - apenas admin_geral pode ver
     if (menuId === 'empresas') {
-      return profile?.role_name === 'admin_geral';
+      return profile?.role_name === 'Administrator';
     }
     
     // Menu "Usuários" - apenas admin_geral pode ver
     if (menuId === 'usuarios') {
-      return profile?.role_name === 'admin_geral';
+      return profile?.role_name === 'Administrator';
     }
     
     // Todos os outros menus são visíveis para todos os usuários autenticados
@@ -37,7 +37,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed }) => {
   const shouldShowSubmenuItem = (menuId: string, submenuId: string) => {
     // Para o menu usuários, "tipos-usuarios" só para admin_geral
     if (menuId === 'usuarios' && submenuId === 'tipos-usuarios') {
-      return profile?.role_name === 'admin_geral';
+      return profile?.role_name === 'Administrator';
     }
     
     // Outros submenus seguem a regra do menu pai

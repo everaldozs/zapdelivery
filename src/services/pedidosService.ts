@@ -16,7 +16,7 @@ export class PedidosService {
     console.log('🔍 Buscando pedidos para profile:', {
       role: profile.role_name,
       estabelecimento_id: profile.estabelecimento_id,
-      nome: profile.nome
+      nome: profile.name
     });
 
     try {
@@ -44,7 +44,7 @@ export class PedidosService {
         .order('data_criacao', { ascending: false });
 
       // Aplicar filtro por estabelecimento apenas para não-admin
-      if (profile.role_name !== 'admin_geral') {
+      if (profile.role_name !== 'Administrator') {
         if (profile.estabelecimento_id) {
           console.log('📌 Filtrando pedidos por estabelecimento:', profile.estabelecimento_id);
           query = query.eq('codigo_estabelecimento', profile.estabelecimento_id);

@@ -43,15 +43,15 @@ const ListarUsuarios: React.FC = () => {
 
   const getRoleBadgeColor = (role: string) => {
     switch (role) {
-      case 'admin_geral':
+      case 'Administrator':
         return 'bg-red-100 text-red-800 border border-red-200';
       case 'admin':
         return 'bg-blue-100 text-blue-800 border border-blue-200';
       case 'operador':
         return 'bg-green-100 text-green-800 border border-green-200';
-      case 'estabelecimento':
+      case 'Estabelecimento':
         return 'bg-purple-100 text-purple-800 border border-purple-200';
-      case 'atendente':
+      case 'Atendente':
         return 'bg-yellow-100 text-yellow-800 border border-yellow-200';
       default:
         return 'bg-gray-100 text-gray-800 border border-gray-200';
@@ -120,7 +120,7 @@ const ListarUsuarios: React.FC = () => {
             <div className="ml-3">
               <p className="text-sm font-medium text-gray-500">Admins Gerais</p>
               <p className="text-2xl font-bold text-gray-900">
-                {users.filter(u => u.role_name === 'admin_geral').length}
+                {users.filter(u => u.role_name === 'Administrator').length}
               </p>
             </div>
           </div>
@@ -134,7 +134,7 @@ const ListarUsuarios: React.FC = () => {
             <div className="ml-3">
               <p className="text-sm font-medium text-gray-500">Estabelecimentos</p>
               <p className="text-2xl font-bold text-gray-900">
-                {users.filter(u => u.role_name === 'estabelecimento').length}
+                {users.filter(u => u.role_name === 'Estabelecimento').length}
               </p>
             </div>
           </div>
@@ -148,7 +148,7 @@ const ListarUsuarios: React.FC = () => {
             <div className="ml-3">
               <p className="text-sm font-medium text-gray-500">Atendentes</p>
               <p className="text-2xl font-bold text-gray-900">
-                {users.filter(u => u.role_name === 'atendente').length}
+                {users.filter(u => u.role_name === 'Atendente').length}
               </p>
             </div>
           </div>
@@ -207,15 +207,15 @@ const ListarUsuarios: React.FC = () => {
                           'inline-flex px-2 py-1 text-xs font-semibold rounded-full',
                           getRoleBadgeColor(user.role_name)
                         )}>
-                          {user.role_name === 'admin_geral' && 'Admin Geral'}
+                          {user.role_name === 'Administrator' && 'Admin Geral'}
                           {user.role_name === 'admin' && 'Admin'}
-                          {user.role_name === 'estabelecimento' && 'Estabelecimento'}
-                          {user.role_name === 'atendente' && 'Atendente'}
+                          {user.role_name === 'Estabelecimento' && 'Estabelecimento'}
+                          {user.role_name === 'Atendente' && 'Atendente'}
                           {user.role_name === 'operador' && 'Operador'}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {user.user_type === 'estabelecimento' ? (
+                        {user.user_type === 'Estabelecimento' ? (
                           <div className="text-xs">
                             {user.cnpj && <div><strong>CNPJ:</strong> {user.cnpj}</div>}
                             {user.telefone && <div><strong>Tel:</strong> {user.telefone}</div>}

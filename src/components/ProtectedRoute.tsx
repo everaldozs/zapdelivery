@@ -45,7 +45,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   // Se usuário está logado mas não tem perfil ativo, mostrar erro
-  if (user && requireAuth && (!profile || !profile.ativo)) {
+  if (user && requireAuth && (!profile || profile.status !== 'active')) {
     return (
       <div className={clsx(
         'min-h-screen flex items-center justify-center p-4',

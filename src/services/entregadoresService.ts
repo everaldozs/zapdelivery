@@ -27,7 +27,7 @@ class EntregadoresService {
       .order('nome', { ascending: true });
 
     // Aplicar filtro por estabelecimento apenas para não-admin
-    if (profile.role_name !== 'admin_geral' && profile.estabelecimento_id) {
+    if (profile.role_name !== 'Administrator' && profile.estabelecimento_id) {
       query = query.eq('codigo_estabelecimento', profile.estabelecimento_id);
     }
 
@@ -47,7 +47,7 @@ class EntregadoresService {
     }
 
     // Verificar permissões
-    if (profile.role_name === 'atendente') {
+    if (profile.role_name === 'Atendente') {
       throw new Error('Atendentes não têm permissão para cadastrar entregadores');
     }
 
@@ -98,7 +98,7 @@ class EntregadoresService {
     }
 
     // Verificar permissões
-    if (profile.role_name === 'atendente') {
+    if (profile.role_name === 'Atendente') {
       throw new Error('Atendentes não têm permissão para editar entregadores');
     }
 
@@ -126,7 +126,7 @@ class EntregadoresService {
       .eq('codigo', codigo);
 
     // Aplicar filtro por estabelecimento para não-admin
-    if (profile.role_name !== 'admin_geral' && profile.estabelecimento_id) {
+    if (profile.role_name !== 'Administrator' && profile.estabelecimento_id) {
       query = query.eq('codigo_estabelecimento', profile.estabelecimento_id);
     }
 
@@ -152,7 +152,7 @@ class EntregadoresService {
     }
 
     // Verificar permissões - apenas estabelecimento e admin podem deletar
-    if (profile.role_name === 'atendente') {
+    if (profile.role_name === 'Atendente') {
       throw new Error('Atendentes não têm permissão para deletar entregadores');
     }
 
@@ -173,7 +173,7 @@ class EntregadoresService {
       .eq('codigo', codigo);
 
     // Aplicar filtro por estabelecimento para não-admin
-    if (profile.role_name !== 'admin_geral' && profile.estabelecimento_id) {
+    if (profile.role_name !== 'Administrator' && profile.estabelecimento_id) {
       query = query.eq('codigo_estabelecimento', profile.estabelecimento_id);
     }
 
@@ -191,7 +191,7 @@ class EntregadoresService {
     }
 
     // Verificar permissões
-    if (profile.role_name === 'atendente') {
+    if (profile.role_name === 'Atendente') {
       throw new Error('Atendentes não têm permissão para alterar status de entregadores');
     }
 
@@ -201,7 +201,7 @@ class EntregadoresService {
       .eq('codigo', codigo);
 
     // Aplicar filtro por estabelecimento para não-admin
-    if (profile.role_name !== 'admin_geral' && profile.estabelecimento_id) {
+    if (profile.role_name !== 'Administrator' && profile.estabelecimento_id) {
       query = query.eq('codigo_estabelecimento', profile.estabelecimento_id);
     }
 

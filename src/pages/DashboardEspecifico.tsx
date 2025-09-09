@@ -18,7 +18,7 @@ import Button from '../components/ui/Button';
 import { Link } from 'react-router-dom';
 
 interface DashboardData {
-  tipo: 'admin_geral' | 'estabelecimento' | 'atendente';
+  tipo: 'Administrator' | 'Estabelecimento' | 'Atendente';
   cards: {
     [key: string]: number;
   };
@@ -131,7 +131,7 @@ const DashboardEspecifico: React.FC = () => {
   if (!dashboardData) return null;
 
   // DASHBOARD ADMIN GERAL
-  if (dashboardData.tipo === 'admin_geral') {
+  if (dashboardData.tipo === 'Administrator') {
     return (
       <div className="space-y-6">
         {/* Header */}
@@ -355,7 +355,7 @@ const DashboardEspecifico: React.FC = () => {
   }
 
   // DASHBOARD ESTABELECIMENTO
-  if (dashboardData.tipo === 'estabelecimento') {
+  if (dashboardData.tipo === 'Estabelecimento') {
     return (
       <div className="space-y-6">
         {/* Header */}
@@ -589,7 +589,7 @@ const DashboardEspecifico: React.FC = () => {
   }
 
   // DASHBOARD ATENDENTE (Simplificado)
-  if (dashboardData.tipo === 'atendente') {
+  if (dashboardData.tipo === 'Atendente') {
     return (
       <div className="space-y-6">
         {/* Header */}

@@ -167,7 +167,7 @@ const FormTiposUsuarios: React.FC = () => {
   };
 
   const isSystemRole = (roleName: string) => {
-    return ['admin_geral', 'estabelecimento', 'atendente'].includes(roleName);
+    return ['Administrator', 'Estabelecimento', 'Atendente'].includes(roleName);
   };
 
   if (loadingData) {

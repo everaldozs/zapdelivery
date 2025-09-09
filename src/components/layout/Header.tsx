@@ -48,11 +48,11 @@ const Header: React.FC<HeaderProps> = ({ onToggleSidebar, sidebarCollapsed }) =>
     if (!profile) return UserCircleIcon;
     
     switch (profile.role_name) {
-      case 'admin_geral':
+      case 'Administrator':
         return ShieldCheckIcon;
-      case 'estabelecimento':
+      case 'Estabelecimento':
         return BuildingStorefrontIcon;
-      case 'atendente':
+      case 'Atendente':
       default:
         return UserCircleIcon;
     }
@@ -149,34 +149,34 @@ const Header: React.FC<HeaderProps> = ({ onToggleSidebar, sidebarCollapsed }) =>
           >
             <div className={clsx(
               'relative p-1 rounded-lg',
-              profile?.role_name === 'admin_geral' && 'bg-purple-100 dark:bg-purple-900',
-              profile?.role_name === 'estabelecimento' && 'bg-blue-100 dark:bg-blue-900',
-              profile?.role_name === 'atendente' && 'bg-green-100 dark:bg-green-900'
+              profile?.role_name === 'Administrator' && 'bg-purple-100 dark:bg-purple-900',
+              profile?.role_name === 'Estabelecimento' && 'bg-blue-100 dark:bg-blue-900',
+              profile?.role_name === 'Atendente' && 'bg-green-100 dark:bg-green-900'
             )}>
               <RoleIcon className={clsx(
                 'h-6 w-6',
-                profile?.role_name === 'admin_geral' && 'text-purple-600 dark:text-purple-400',
-                profile?.role_name === 'estabelecimento' && 'text-blue-600 dark:text-blue-400',
-                profile?.role_name === 'atendente' && 'text-green-600 dark:text-green-400',
+                profile?.role_name === 'Administrator' && 'text-purple-600 dark:text-purple-400',
+                profile?.role_name === 'Estabelecimento' && 'text-blue-600 dark:text-blue-400',
+                profile?.role_name === 'Atendente' && 'text-green-600 dark:text-green-400',
                 !profile && 'text-gray-400'
               )} />
             </div>
             <div className="hidden md:flex items-center space-x-3">
               <div className="text-left">
                 <p className="text-sm font-medium">
-                  {profile?.nome || user?.email?.split('@')[0] || 'Usuário'}
+                  {profile?.name || user?.email?.split('@')[0] || 'Usuário'}
                 </p>
                 <div className="flex items-center space-x-2">
                   <span className={clsx(
                     'text-xs px-2 py-0.5 rounded-full font-medium',
-                    profile?.role_name === 'admin_geral' && 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
-                    profile?.role_name === 'estabelecimento' && 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
-                    profile?.role_name === 'atendente' && 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
+                    profile?.role_name === 'Administrator' && 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
+                    profile?.role_name === 'Estabelecimento' && 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
+                    profile?.role_name === 'Atendente' && 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
                     !profile && 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
                   )}>
-                    {profile?.role_display_name || 'Carregando...'}
+                    {profile?.role_name || 'Carregando...'}
                   </span>
-                  {profile?.estabelecimento_nome && profile.role_name !== 'admin_geral' && (
+                  {profile?.estabelecimento_nome && profile.role_name !== 'Administrator' && (
                     <span className={clsx(
                       'text-xs',
                       theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
@@ -210,7 +210,7 @@ const Header: React.FC<HeaderProps> = ({ onToggleSidebar, sidebarCollapsed }) =>
                   'text-sm font-medium',
                   theme === 'dark' ? 'text-white' : 'text-gray-900'
                 )}>
-                  {profile?.nome || 'Usuário'}
+                  {profile?.name || 'Usuário'}
                 </p>
                 <p className={clsx(
                   'text-xs mt-1',
