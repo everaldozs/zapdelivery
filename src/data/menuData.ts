@@ -99,6 +99,7 @@ export const menuItems: MenuItem[] = [
     submenu: [
       { id: 'cadastrar-usuario', title: 'Cadastrar Usuário', path: '/usuarios/cadastrar' },
       { id: 'listar-usuarios', title: 'Listar Usuários', path: '/usuarios/listar' },
+      { id: 'tipos-usuarios', title: 'Tipos de Usuários', path: '/usuarios/tipos' },
     ],
   },
   {

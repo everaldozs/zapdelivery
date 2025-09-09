@@ -33,6 +33,22 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed }) => {
     return true;
   };
 
+  // Função para verificar se um submenu deve ser exibido
+  const shouldShowSubmenuItem = (menuId: string, submenuId: string) => {
+    // Para o menu usuários, "tipos-usuarios" só para admin_geral
+    if (menuId === 'usuarios' && submenuId === 'tipos-usuarios') {
+      return profile?.role_name === 'admin_geral';
+    }
+    
+    // Outros submenus seguem a regra do menu pai
+    return true;
+  };
+
+  // Função para filtrar submenu baseado nas regras de permissão
+  const filterSubmenu = (menuId: string, submenu: any[]) => {
+    return submenu.filter(subItem => shouldShowSubmenuItem(menuId, subItem.id));
+  };
+
   const toggleMenu = (menuId: string) => {
     if (expandedMenu === menuId) {
       setExpandedMenu(null);
@@ -113,7 +129,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed }) => {
                   {/* Submenu */}
                   {!isCollapsed && expandedMenu === item.id && (
                     <ul className="mt-2 space-y-1 ml-4">
-                      {item.submenu.map((subItem) => (
+                      {filterSubmenu(item.id, item.submenu).map((subItem) => (
                         <li key={subItem.id}>
                           <Link
                             to={subItem.path}

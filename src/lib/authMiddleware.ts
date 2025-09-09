@@ -244,5 +244,10 @@ export const PERMISSION_CONFIGS = {
   // Gerenciamento de usuários do sistema (apenas admin_geral)
   USER_MANAGEMENT: {
     roles: ['admin_geral'] as UserRole[]
+  },
+  
+  // Gerenciamento de tipos de usuários (apenas admin_geral)
+  USER_TYPES_MANAGEMENT: {
+    roles: ['admin_geral'] as UserRole[]
   }
 } as const;

@@ -30,6 +30,8 @@ import ListarEntregadores from './pages/ListarEntregadores';
 import CadastrarEntregador from './pages/CadastrarEntregador';
 import ListarUsuarios from './pages/Usuarios/ListarUsuarios';
 import CadastrarUsuario from './pages/Usuarios/CadastrarUsuario';
+import TiposUsuarios from './pages/Usuarios/TiposUsuarios';
+import FormTiposUsuarios from './pages/Usuarios/FormTiposUsuarios';
 import LogoutPage from './pages/LogoutPage';
 import { Toaster } from 'sonner';
 import './App.css';
@@ -273,6 +275,21 @@ function App() {
                       <Route path="/usuarios/listar" element={
                         <UserManagementGuard showUnauthorized={true}>
                           <ListarUsuarios />
+                        </UserManagementGuard>
+                      } />
+                      <Route path="/usuarios/tipos" element={
+                        <UserManagementGuard showUnauthorized={true}>
+                          <TiposUsuarios />
+                        </UserManagementGuard>
+                      } />
+                      <Route path="/usuarios/tipos/novo" element={
+                        <UserManagementGuard showUnauthorized={true}>
+                          <FormTiposUsuarios />
+                        </UserManagementGuard>
+                      } />
+                      <Route path="/usuarios/tipos/:id/editar" element={
+                        <UserManagementGuard showUnauthorized={true}>
+                          <FormTiposUsuarios />
                         </UserManagementGuard>
                       } />
                       
