@@ -26,20 +26,35 @@ export interface UpdateUserTypeRequest {
 export const userTypesService = {
   // Listar todos os tipos de usuários
   async getUserTypes(): Promise<UserType[]> {
+    console.log('🔍 Iniciando getUserTypes...');
+    
     try {
+      console.log('📡 Fazendo requisição ao Supabase...');
       const { data, error } = await supabase
         .from('user_roles')
         .select('*')
         .order('id', { ascending: true });
 
+      console.log('📊 Resposta do Supabase:', { data, error });
+
       if (error) {
-        console.error('Erro ao buscar tipos de usuários:', error);
-        throw error;
+        console.error('❌ Erro ao buscar tipos de usuários:', error);
+        console.error('❌ Detalhes do erro:', JSON.stringify(error, null, 2));
+        throw new Error(`Erro na consulta: ${error.message || 'Erro desconhecido'}`);
       }
 
-      return data || [];
+      if (!data) {
+        console.warn('⚠️ Dados nulos retornados do Supabase');
+        return [];
+      }
+
+      console.log('✅ Tipos de usuários carregados com sucesso:', data.length, 'registros');
+      console.log('📋 Dados:', data);
+      
+      return data;
     } catch (error) {
-      console.error('Erro ao buscar tipos de usuários:', error);
+      console.error('💥 Erro geral em getUserTypes:', error);
+      console.error('💥 Stack trace:', error instanceof Error ? error.stack : 'N/A');
       throw error;
     }
   },
@@ -213,45 +228,69 @@ export const userTypesService = {
 
   // Contar quantos usuários estão usando cada tipo
   async getUserTypeUsageStats(): Promise<Array<{id: number, role_display_name: string, user_count: number}>> {
+    console.log('📊 Iniciando getUserTypeUsageStats...');
+    
     try {
       // Primeiro buscar todos os tipos
+      console.log('📡 Buscando tipos de usuários para estatísticas...');
       const { data: userRoles, error: rolesError } = await supabase
         .from('user_roles')
         .select('id, role_display_name')
         .order('id');
 
       if (rolesError) {
-        console.error('Erro ao buscar tipos de usuários:', rolesError);
+        console.error('❌ Erro ao buscar tipos de usuários para stats:', rolesError);
         throw rolesError;
       }
 
-      // Para cada tipo, contar quantos usuários existem
-      const statsPromises = (userRoles || []).map(async (role) => {
-        const { count, error: countError } = await supabase
-          .from('user_profiles')
-          .select('*', { count: 'exact', head: true })
-          .eq('role_id', role.id);
+      console.log('📋 Tipos encontrados para stats:', userRoles?.length || 0);
 
-        if (countError) {
-          console.error(`Erro ao contar usuários do tipo ${role.id}:`, countError);
-          return {
+      if (!userRoles || userRoles.length === 0) {
+        console.warn('⚠️ Nenhum tipo de usuário encontrado para estatísticas');
+        return [];
+      }
+
+      // Para cada tipo, contar quantos usuários existem
+      const stats = [];
+      
+      for (const role of userRoles) {
+        console.log(`🔢 Contando usuários para tipo ${role.id} (${role.role_display_name})...`);
+        
+        try {
+          const { count, error: countError } = await supabase
+            .from('user_profiles')
+            .select('*', { count: 'exact', head: true })
+            .eq('role_id', role.id);
+
+          if (countError) {
+            console.error(`❌ Erro ao contar usuários do tipo ${role.id}:`, countError);
+            stats.push({
+              id: role.id,
+              role_display_name: role.role_display_name,
+              user_count: 0
+            });
+          } else {
+            console.log(`✅ Tipo ${role.id}: ${count || 0} usuários`);
+            stats.push({
+              id: role.id,
+              role_display_name: role.role_display_name,
+              user_count: count || 0
+            });
+          }
+        } catch (err) {
+          console.error(`💥 Erro geral ao contar tipo ${role.id}:`, err);
+          stats.push({
             id: role.id,
             role_display_name: role.role_display_name,
             user_count: 0
-          };
+          });
         }
+      }
 
-        return {
-          id: role.id,
-          role_display_name: role.role_display_name,
-          user_count: count || 0
-        };
-      });
-
-      const stats = await Promise.all(statsPromises);
+      console.log('✅ Estatísticas finalizadas:', stats);
       return stats;
     } catch (error) {
-      console.error('Erro ao buscar estatísticas de uso:', error);
+      console.error('💥 Erro geral em getUserTypeUsageStats:', error);
       throw error;
     }
   }

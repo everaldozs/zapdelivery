@@ -37,39 +37,58 @@ const TiposUsuarios: React.FC = () => {
   }, []);
 
   const loadUserTypes = async () => {
+    console.log('🚀 [TiposUsuarios] Iniciando carregamento...');
+    
     try {
       setLoading(true);
       setError(null);
+      console.log('🔄 [TiposUsuarios] Loading=true, Error=null');
       
       // Primeiro tentar apenas carregar os tipos básicos
+      console.log('📎 [TiposUsuarios] Chamando userTypesService.getUserTypes()...');
       const types = await userTypesService.getUserTypes();
-      console.log('Tipos carregados:', types);
+      console.log('✅ [TiposUsuarios] Tipos carregados:', types?.length || 0, 'registros');
+      console.log('📋 [TiposUsuarios] Dados dos tipos:', types);
       
       // Depois tentar carregar estatísticas (se der erro, continuar sem)
       let stats: any[] = [];
       try {
+        console.log('📊 [TiposUsuarios] Chamando userTypesService.getUserTypeUsageStats()...');
         stats = await userTypesService.getUserTypeUsageStats();
-        console.log('Estatísticas carregadas:', stats);
+        console.log('✅ [TiposUsuarios] Estatísticas carregadas:', stats?.length || 0, 'registros');
+        console.log('📋 [TiposUsuarios] Dados das stats:', stats);
       } catch (statsError) {
-        console.warn('Erro ao carregar estatísticas, continuando sem elas:', statsError);
+        console.warn('⚠️ [TiposUsuarios] Erro ao carregar estatísticas, continuando sem elas:', statsError);
       }
       
       // Combinar dados dos tipos com estatísticas de uso
+      console.log('🔗 [TiposUsuarios] Combinando tipos com estatísticas...');
       const typesWithStats = types.map(type => {
         const stat = stats.find(s => s.id === type.id);
-        return {
+        const result = {
           ...type,
           user_count: stat?.user_count || 0
         };
+        console.log(`🔗 [TiposUsuarios] Tipo ${type.id}: ${stat?.user_count || 0} usuários`);
+        return result;
       });
       
-      console.log('Tipos com estatísticas:', typesWithStats);
+      console.log('✅ [TiposUsuarios] Combinação finalizada:', typesWithStats);
       setUserTypes(typesWithStats);
-    } catch (err) {
-      console.error('Erro ao carregar tipos de usuários:', err);
-      setError('Erro ao carregar a lista de tipos de usuários. Tente novamente.');
+      console.log('💾 [TiposUsuarios] Estado atualizado com', typesWithStats.length, 'tipos');
+      
+    } catch (err: any) {
+      console.error('🚨 [TiposUsuarios] ERRO FATAL:', err);
+      console.error('🚨 [TiposUsuarios] Tipo do erro:', typeof err);
+      console.error('🚨 [TiposUsuarios] Mensagem:', err?.message || 'Erro sem mensagem');
+      console.error('🚨 [TiposUsuarios] Stack:', err?.stack || 'Sem stack trace');
+      
+      const errorMsg = err?.message || 'Erro ao carregar a lista de tipos de usuários. Tente novamente.';
+      setError(errorMsg);
+      console.log('🚨 [TiposUsuarios] Error state definido:', errorMsg);
     } finally {
       setLoading(false);
+      console.log('🏁 [TiposUsuarios] Loading=false - Carregamento finalizado');
     }
   };
 

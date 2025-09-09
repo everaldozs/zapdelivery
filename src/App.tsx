@@ -32,6 +32,7 @@ import ListarUsuarios from './pages/Usuarios/ListarUsuarios';
 import CadastrarUsuario from './pages/Usuarios/CadastrarUsuario';
 import TiposUsuarios from './pages/Usuarios/TiposUsuarios';
 import FormTiposUsuarios from './pages/Usuarios/FormTiposUsuarios';
+import TestUserTypes from './pages/TestUserTypes';
 import LogoutPage from './pages/LogoutPage';
 import { Toaster } from 'sonner';
 import './App.css';
@@ -292,6 +293,9 @@ function App() {
                           <FormTiposUsuarios />
                         </UserManagementGuard>
                       } />
+                      
+                      {/* Rota de teste para debug */}
+                      <Route path="/test-user-types" element={<TestUserTypes />} />
                       
                       {/* CONFIGURAÇÕES - Admin geral e estabelecimento */}
                       <Route path="/configuracoes/dados-empresa" element={
