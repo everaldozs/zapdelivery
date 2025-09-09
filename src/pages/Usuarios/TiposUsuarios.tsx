@@ -41,10 +41,18 @@ const TiposUsuarios: React.FC = () => {
       setLoading(true);
       setError(null);
       
-      const [types, stats] = await Promise.all([
-        userTypesService.getUserTypes(),
-        userTypesService.getUserTypeUsageStats()
-      ]);
+      // Primeiro tentar apenas carregar os tipos básicos
+      const types = await userTypesService.getUserTypes();
+      console.log('Tipos carregados:', types);
+      
+      // Depois tentar carregar estatísticas (se der erro, continuar sem)
+      let stats: any[] = [];
+      try {
+        stats = await userTypesService.getUserTypeUsageStats();
+        console.log('Estatísticas carregadas:', stats);
+      } catch (statsError) {
+        console.warn('Erro ao carregar estatísticas, continuando sem elas:', statsError);
+      }
       
       // Combinar dados dos tipos com estatísticas de uso
       const typesWithStats = types.map(type => {
@@ -55,6 +63,7 @@ const TiposUsuarios: React.FC = () => {
         };
       });
       
+      console.log('Tipos com estatísticas:', typesWithStats);
       setUserTypes(typesWithStats);
     } catch (err) {
       console.error('Erro ao carregar tipos de usuários:', err);
@@ -123,7 +132,7 @@ const TiposUsuarios: React.FC = () => {
   };
 
   const isSystemRole = (roleName: string) => {
-    return ['Administrator', 'Estabelecimento', 'Atendente'].includes(roleName);
+    return ['admin_geral', 'estabelecimento', 'atendente'].includes(roleName);
   };
 
   if (loading) {

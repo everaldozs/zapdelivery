@@ -165,7 +165,7 @@ export const userTypesService = {
         .eq('id', id)
         .single();
 
-      const systemRoles = ['Administrator', 'Estabelecimento', 'Atendente'];
+      const systemRoles = ['admin_geral', 'estabelecimento', 'atendente'];
       if (userType && systemRoles.includes(userType.role_name)) {
         throw new Error('Não é possível excluir tipos de usuário padrão do sistema');
       }
@@ -214,24 +214,42 @@ export const userTypesService = {
   // Contar quantos usuários estão usando cada tipo
   async getUserTypeUsageStats(): Promise<Array<{id: number, role_display_name: string, user_count: number}>> {
     try {
-      const { data, error } = await supabase
+      // Primeiro buscar todos os tipos
+      const { data: userRoles, error: rolesError } = await supabase
         .from('user_roles')
-        .select(`
-          id,
-          role_display_name,
-          user_profiles(count)
-        `);
+        .select('id, role_display_name')
+        .order('id');
 
-      if (error) {
-        console.error('Erro ao buscar estatísticas de uso:', error);
-        throw error;
+      if (rolesError) {
+        console.error('Erro ao buscar tipos de usuários:', rolesError);
+        throw rolesError;
       }
 
-      return data?.map(item => ({
-        id: item.id,
-        role_display_name: item.role_display_name,
-        user_count: Array.isArray(item.user_profiles) ? item.user_profiles.length : 0
-      })) || [];
+      // Para cada tipo, contar quantos usuários existem
+      const statsPromises = (userRoles || []).map(async (role) => {
+        const { count, error: countError } = await supabase
+          .from('user_profiles')
+          .select('*', { count: 'exact', head: true })
+          .eq('role_id', role.id);
+
+        if (countError) {
+          console.error(`Erro ao contar usuários do tipo ${role.id}:`, countError);
+          return {
+            id: role.id,
+            role_display_name: role.role_display_name,
+            user_count: 0
+          };
+        }
+
+        return {
+          id: role.id,
+          role_display_name: role.role_display_name,
+          user_count: count || 0
+        };
+      });
+
+      const stats = await Promise.all(statsPromises);
+      return stats;
     } catch (error) {
       console.error('Erro ao buscar estatísticas de uso:', error);
       throw error;
