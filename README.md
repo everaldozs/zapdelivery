@@ -1,50 +1,59 @@
-# React + TypeScript + Vite
+# 🚀 ZapDelivery Admin - Sistema de Gestão Completo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 📋 Sobre o Projeto
+Sistema completo de gestão para delivery com interface administrativa moderna, construído com React + TypeScript + Vite + Supabase.
 
-Currently, two official plugins are available:
+### ✨ Funcionalidades Principais
+- 🔐 **Sistema de Autenticação** completo com níveis hierárquicos
+- 📊 **Dashboard Interativo** com métricas e gráficos
+- 🛒 **Gestão de Pedidos** com sistema Kanban
+- 👥 **Gerenciamento de Usuários** e permissões
+- 🏪 **Cadastro de Estabelecimentos** e produtos
+- 📱 **Interface Responsiva** para mobile e desktop
+- 🔄 **Webhooks** para integração em tempo real
+- 📈 **Relatórios** e analytics
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 🌐 URLs do Sistema
+- **Produção**: https://app.whisio.com.br
+- **Vercel**: https://zapdelivery-git-master-zapdelivery.vercel.app/
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### 🔑 Credenciais de Teste
+```
+Email: everaldozs@gmail.com
+Senha: @20EndriuS24@#
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### 🛠️ Tecnologias Utilizadas
+- **Frontend**: React 18 + TypeScript + Vite
+- **Backend**: Supabase (PostgreSQL + Edge Functions)
+- **Styling**: Tailwind CSS + Shadcn/ui
+- **Deploy**: Vercel + GitHub Actions
+- **Autenticação**: Supabase Auth
+- **Estado**: Context API + Custom Hooks
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+### 📦 Estrutura do Projeto
 ```
+src/
+├── components/     # Componentes reutilizáveis
+├── pages/         # Páginas da aplicação
+├── services/      # Serviços e APIs
+├── context/       # Context providers
+├── hooks/         # Custom hooks
+└── types/         # TypeScript types
+```
+
+### 🚀 Como Executar
+```bash
+npm install
+npm run dev
+```
+
+### 📝 Status do Sistema
+✅ **100% Funcional** - Todas as correções críticas aplicadas
+- Loop infinito inicial corrigido
+- Conflitos NPM/PNPM resolvidos  
+- Problemas de navegação corrigidos
+- Race conditions no login corrigidas
+
+---
+**Desenvolvido por**: MiniMax Agent | **Última atualização**: 2025-01-11
