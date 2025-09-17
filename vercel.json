@@ -1,0 +1,21 @@
+{
+  "framework": "vite",
+  "buildCommand": "npm run build",
+  "installCommand": "npm install --legacy-peer-deps",
+  "outputDirectory": "dist",
+  "routes": [
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ],
+  "env": {
+    "VITE_SUPABASE_URL": "https://tbtjsvvmrisukvqlhfgq.supabase.co",
+    "VITE_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRidGpzdnZtcmlzdWt2cWxoZmdxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEzNzQ0ODcsImV4cCI6MjA2Njk1MDQ4N30.Hi108NVjzyl2tL_ZgWiaB-JhZalQdG-DUodVCl4uMRs",
+    "VITE_APP_TITLE": "ZapDelivery Admin",
+    "VITE_APP_URL": "https://app.whisio.com.br"
+  }
+}

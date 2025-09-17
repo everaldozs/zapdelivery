@@ -1,0 +1,116 @@
+  /**
+   * Criar um novo pedido com itens
+   */
+  static async criarPedido(
+    dadosPedido: any,
+    itens: any[],
+    profile: UserProfile | null
+  ): Promise<{ pedido: PedidoSupabase, itens: ItemPedidoSupabase[] }> {
+    if (!profile) {
+      throw new Error('Usuário não autenticado');
+    }
+
+    if (!profile.estabelecimento_id) {
+      throw new Error('Estabelecimento não encontrado');
+    }
+
+    if (itens.length === 0) {
+      throw new Error('Pedido deve ter pelo menos um item');
+    }
+
+    try {
+      // Gerar número do pedido
+      const numeroPedido = `${new Date().getFullYear()}${Date.now().toString().slice(-4)}`;
+
+      // Criar pedido
+      const { data: pedidoData, error: pedidoError } = await supabase
+        .from('pedidos')
+        .insert({
+          "numero do pedido": numeroPedido,
+          codigo_estabelecimento: profile.estabelecimento_id,
+          codigo_cliente: dadosPedido.codigo_cliente, // Adicionar cliente
+          total_pedido: dadosPedido.total_pedido,
+          "Forma de Pagamento": dadosPedido.forma_pagamento,
+          "Forma de Entregra": dadosPedido.forma_entrega,
+          "Valor_da_Entrega": dadosPedido.valor_entrega,
+          "Obervação do Pedido": dadosPedido.observacao_pedido,
+          status: 'Pedindo' as StatusPedidoSupabase
+        })
+        .select()
+        .single(); // Usar single() em vez de maybeSingle()
+
+      if (pedidoError) {
+        console.error('Erro ao criar pedido:', pedidoError);
+        throw pedidoError;
+      }
+
+      if (!pedidoData) {
+        throw new Error('Falha ao criar pedido');
+      }
+
+      // Criar itens do pedido
+      const itensParaInserir = itens.map(item => ({
+        codigo_pedido: pedidoData.codigo,
+        numero_do_pedido: numeroPedido,
+        codigo_produto: item.codigo_produto,
+        nome_item: item.nome_item,
+        qtde_item: item.qtde_item,
+        valor_item: item.valor_item,
+        total_produto: item.total_produto
+      }));
+
+      const { data: itensData, error: itensError } = await supabase
+        .from('itens_pedido')
+        .insert(itensParaInserir)
+        .select();
+
+      if (itensError) {
+        console.error('Erro ao criar itens do pedido:', itensError);
+        // Tentar deletar o pedido criado
+        await supabase.from('pedidos').delete().eq('codigo', pedidoData.codigo);
+        throw itensError;
+      }
+
+      // Converter para formatos de retorno
+      const pedidoFormatado: PedidoSupabase = {
+        codigo: pedidoData.codigo,
+        numero_pedido: numeroPedido,
+        codigo_estabelecimento: pedidoData.codigo_estabelecimento,
+        codigo_cliente: pedidoData.codigo_cliente,
+        status: pedidoData.status as StatusPedidoSupabase,
+        total_pedido: parseFloat(pedidoData.total_pedido?.toString() || '0'),
+        data_criacao: pedidoData.data_criacao,
+        data_ultima_alteracao: pedidoData.data_ultima_alteracao,
+        forma_pagamento: pedidoData["Forma de Pagamento"],
+        forma_entrega: pedidoData["Forma de Entregra"],
+        valor_entrega: parseFloat(pedidoData["Valor_da_Entrega"]?.toString() || '0'),
+        observacao_pedido: pedidoData["Obervação do Pedido"],
+        cliente_nome: undefined,
+        cliente_sobrenome: undefined,
+        cliente_whatsapp: undefined
+      };
+
+      const itensFormatados: ItemPedidoSupabase[] = (itensData || []).map(item => ({
+        codigo: item.codigo,
+        codigo_pedido: item.codigo_pedido,
+        codigo_produto: item.codigo_produto,
+        nome_item: item.nome_item || '',
+        qtde_item: item.qtde_item || 0,
+        valor_item: parseFloat(item.valor_item?.toString() || '0'),
+        total_produto: parseFloat(item.total_produto?.toString() || '0'),
+        data_criacao: item.data_criacao,
+        data_ultima_alteracao: item.data_ultima_alteracao,
+        numero_do_pedido: item.numero_do_pedido || ''
+      }));
+
+      return { pedido: pedidoFormatado, itens: itensFormatados };
+
+    } catch (error) {
+      console.error('💥 Erro crítico ao criar pedido:', error);
+      throw error;
+    }
+  }
+
+}
+
+export default PedidosService;
